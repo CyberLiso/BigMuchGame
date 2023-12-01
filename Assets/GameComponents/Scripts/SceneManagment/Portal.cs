@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.AI;
 using RPG.Core;
+using RPG.Control;
 
 namespace RPG.SceneManagment
 {
@@ -23,6 +24,11 @@ namespace RPG.SceneManagment
 
         [SerializeField] portalDestinations portalIdentifier;
         [SerializeField] portalDestinations thisPortal;
+
+        private void Start()
+        {
+            
+        }
         private void OnTriggerEnter(Collider other)
         {
             if (other.tag == "Player")
@@ -33,11 +39,13 @@ namespace RPG.SceneManagment
 
         private IEnumerator PortalLoadWait()
         {
+            RemovePlayerControl();
             Fader fader = FindObjectOfType<Fader>();
             yield return fader.FadeOut(fadeOutTime);
             DontDestroyOnLoad(gameObject);
             SavableWrapping saver = FindObjectOfType<SavableWrapping>();
             saver.ResaveSaveFile();
+            ReturnPlayerControl();
             yield return SceneManager.LoadSceneAsync(sceneIndex);
             saver.LoadSaveFile();
             Portal NextPortal = GetPortal();
@@ -45,6 +53,17 @@ namespace RPG.SceneManagment
             yield return new WaitForSeconds(timeToWaitInbetweenScenes);
             yield return fader.FadeIn(fadeOutTime);
             Destroy(gameObject);
+        }
+        private void RemovePlayerControl()
+        {
+            GameObject player = GameObject.FindWithTag("Player");
+            player.GetComponent<ActionSchedular>().CancelCurrentAction();
+            player.GetComponent<MovementController>().enabled = false;
+        }
+        private void ReturnPlayerControl()
+        {
+            GameObject player = GameObject.FindWithTag("Player");
+            player.GetComponent<MovementController>().enabled = true;
         }
 
         private void UpdatePlayerPosition(Portal nextPortal)
