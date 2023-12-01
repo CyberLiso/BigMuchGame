@@ -75,7 +75,7 @@ Material:
     - _BUILTIN_QueueOffset: 0
     - _BumpScale: 1
     - _Cutoff: 0.5
-    - _Dense: 64.17
+    - _Dense: 64.95
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
@@ -92,8 +92,8 @@ Material:
     - _Speed: 8.3
     - _SrcBlend: 1
     - _UVSec: 0
-    - _WaveSize: 0.1
-    - _WaveSpeed: 0.3
+    - _WaveSize: -0.3
+    - _WaveSpeed: 0.63
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
