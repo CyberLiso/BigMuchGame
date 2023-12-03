@@ -9,7 +9,7 @@ namespace RPG.SceneManagment
         CanvasGroup canvasGroup;
         [Range(0, 6)] [SerializeField] float fadeOutTime = 3f;
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             canvasGroup = GetComponent<CanvasGroup>();
         }
@@ -21,6 +21,10 @@ namespace RPG.SceneManagment
                 canvasGroup.alpha += Time.deltaTime / fadeTime;
                 yield return null;
             }
+        }
+        public void InstantFadeOut()
+        {
+            canvasGroup.alpha = 1f;
         }
         public IEnumerator FadeIn(float fadeTime)
         {

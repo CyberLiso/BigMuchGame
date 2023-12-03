@@ -3,16 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using RPG.Saving;
+using RPG.SceneManagment;
 
 namespace RPG.Core
 {
     public class SavableWrapping : MonoBehaviour
     {
         const string saveFileName = "Save";
+        [SerializeField] float fadeInTime = 1f;
         // Start is called before the first frame update
-        void Start()
+        IEnumerator Start()
         {
-
+            Fader fader = FindObjectOfType<Fader>();
+            fader.InstantFadeOut();
+            yield return GetComponent<SavingSystem>().LoadLastScene(saveFileName);
+            yield return fader.FadeIn(fadeInTime);
         }
         private void Awake()
         {
