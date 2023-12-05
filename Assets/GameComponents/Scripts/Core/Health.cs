@@ -1,14 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using RPG.Saving;
 using UnityEngine.SceneManagement;
 
 namespace RPG.Core
 {
 
 
-    public class Health : MonoBehaviour, ISaveable
+    public class Health : MonoBehaviour
     {
         [Range(0, 1000)] [SerializeField] float MaxHealth = 100f;
         public float currentHealth;
@@ -41,25 +40,8 @@ namespace RPG.Core
         }
         void Start()
         {
-            if (!hasBeenSaved) currentHealth = MaxHealth;
+            currentHealth = MaxHealth;
             animator = GetComponent<Animator>();
-        }
-
-        public object CaptureState()
-        {
-            hasBeenSaved = true;
-            return currentHealth;
-        }
-
-        public void RestoreState(object state)
-        {
-            float SaveableHealth = (float)state;
-            Debug.Log(SaveableHealth.ToString());
-            currentHealth = SaveableHealth;
-            if (currentHealth == 0)
-            {
-                Death();
-            }
         }
     }
 }

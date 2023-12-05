@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using RPG.Core;
-using RPG.Saving;
 using RPG.SceneManagment;
 
 namespace RPG.Movement
 {
-    public class Move : MonoBehaviour, IAction, ISaveable
+    public class Move : MonoBehaviour, IAction
     {
 
         //Variables:
@@ -54,20 +53,6 @@ namespace RPG.Movement
             player.speed = maxSpeed * speedFraction;
             player.destination = destination;
             player.isStopped = false;
-        }
-
-        public object CaptureState()
-        {
-            return new SerializableVector3(transform.position);
-        }
-
-        public void RestoreState(object state)
-        { 
-            SerializableVector3 savedPlayerPosition = (SerializableVector3)state;
-            GetComponent<ActionSchedular>().CancelCurrentAction();
-            player.enabled = false;
-            transform.position = savedPlayerPosition.ToVector();
-            player.enabled = true;
         }
     }
 }
