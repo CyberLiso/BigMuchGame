@@ -7,11 +7,11 @@ namespace RPG.Core
 {
 
 
-    public class Health : MonoBehaviour
+    public class Health : MonoBehaviour,IESavaeble
     {
         [Range(0, 1000)] [SerializeField] float MaxHealth = 100f;
         public float currentHealth;
-        private static bool hasBeenSaved;
+        public static bool hasBeenSaved = false;
         private Animator animator;
         public bool IsDead { get; private set; }
 
@@ -39,9 +39,24 @@ namespace RPG.Core
             animator.SetTrigger("Death");
         }
         void Start()
-        {
+        { 
             currentHealth = MaxHealth;
             animator = GetComponent<Animator>();
+        }
+
+        public object CaptureState()
+        {
+            return currentHealth;
+        }
+
+        public void RestoreState(object state)
+        {
+            float restoredState = (float)state;
+            currentHealth = restoredState;
+            if(currentHealth == 0)
+            {
+                Death();
+            }
         }
     }
 }
