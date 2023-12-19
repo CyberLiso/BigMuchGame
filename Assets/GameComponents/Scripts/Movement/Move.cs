@@ -64,6 +64,7 @@ namespace RPG.Movement
         {
             SavaebleVector3 restoredPlayerPosition = (SavaebleVector3)state;
             transform.position = restoredPlayerPosition.ToVector3();
+            GetComponent<ActionSchedular>().CancelCurrentAction();
         }
     }
 }

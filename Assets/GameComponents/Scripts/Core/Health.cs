@@ -39,8 +39,12 @@ namespace RPG.Core
             animator.SetTrigger("Death");
         }
         void Start()
-        { 
-            currentHealth = MaxHealth;
+        {
+            if (!hasBeenSaved)
+            {
+                currentHealth = MaxHealth; 
+                hasBeenSaved = true;
+            }
             animator = GetComponent<Animator>();
         }
 

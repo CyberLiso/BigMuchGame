@@ -42,7 +42,7 @@ namespace RPG.Saving
         }
 
 
-        //#if UNITY_EDITOR
+        #if UNITY_EDITOR
         private void Update()
         {
             if (Application.IsPlaying(gameObject)) return;
@@ -57,4 +57,4 @@ namespace RPG.Saving
         }
     }
 }
-   // #endif
+    #endif
