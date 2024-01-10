@@ -12,6 +12,8 @@ namespace RPG.Combat
         Health targetLocation;
         [Range(0, 10)] [SerializeField] float StoppingDistance;
         [Range(0, 5)] [SerializeField] float attackThrotleTime;
+        [SerializeField] GameObject EquippedWeapon = null;
+        [SerializeField] Transform weaponPosition;
         private float timeSinceLastAttack = Mathf.Infinity;
         private bool canAttack = true;
         public float fistAttackDamage = 10f;
@@ -26,7 +28,7 @@ namespace RPG.Combat
         // Start is called before the first frame update
         void Start()
         {
-
+            //Instantiate(EquippedWeapon, weaponPosition);
         }
 
         public bool CanAttack(GameObject combatTarget)

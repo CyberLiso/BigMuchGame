@@ -41,7 +41,7 @@ namespace RPG.Core
         }
         void Start()
         {
-            if (!hasBeenSaved) currentHealth = MaxHealth;
+            //if (!hasBeenSaved) currentHealth = MaxHealth;
             animator = GetComponent<Animator>();
         }
 
@@ -53,6 +53,7 @@ namespace RPG.Core
 
         public void RestoreState(object state)
         {
+            currentHealth = MaxHealth;
             float SaveableHealth = (float)state;
             Debug.Log(SaveableHealth.ToString());
             currentHealth = SaveableHealth;
