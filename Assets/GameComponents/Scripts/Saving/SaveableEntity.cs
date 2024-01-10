@@ -12,6 +12,7 @@ namespace RPG.Saving
     {
         [SerializeField] string uniqueIdentifier = "";
         static Dictionary<string, SaveableEntity> globalLookup = new Dictionary<string, SaveableEntity>();
+        //static Dictionary<string,SaveableEntity> listOfUUIDS = new Dictionary<string, SaveableEntity>();
 
         public string GetUniqueIdentifier()
         {
@@ -41,7 +42,6 @@ namespace RPG.Saving
             }
         }
 
-#if UNITY_EDITOR
         private void Update() {
             if (Application.IsPlaying(gameObject)) return;
             if (string.IsNullOrEmpty(gameObject.scene.path)) return;
@@ -57,21 +57,18 @@ namespace RPG.Saving
 
             globalLookup[property.stringValue] = this;
         }
-#endif
-
         private bool IsUnique(string candidate)
         {
-            if (!globalLookup.ContainsKey(candidate)) return true;
+            if (globalLookup.ContainsKey(candidate)) return true;
 
             if (globalLookup[candidate] == this) return true;
 
-            if (globalLookup[candidate] == null)
+            if(globalLookup[candidate] == null)
             {
                 globalLookup.Remove(candidate);
                 return true;
             }
-
-            if (globalLookup[candidate].GetUniqueIdentifier() != candidate)
+            if(globalLookup[candidate].GetUniqueIdentifier() != candidate)
             {
                 globalLookup.Remove(candidate);
                 return true;
@@ -79,5 +76,6 @@ namespace RPG.Saving
 
             return false;
         }
+
     }
 }
