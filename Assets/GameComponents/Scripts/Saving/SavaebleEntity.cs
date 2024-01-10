@@ -18,23 +18,27 @@ namespace RPG.Saving
             return uniqueIdentifier;
         }
 
-        public object CaptureState()
+        public Dictionary<string,object> CaptureState()
         {
-            return new SavaebleVector3(transform.position);
+            Dictionary<string, object> allSavaebleStates = new Dictionary<string, object>();
+            foreach (IESavaeble savaeble in gameObject.GetComponents<IESavaeble>())
+            {
+                allSavaebleStates[savaeble.ToString()] = savaeble.CaptureState();
+            }
+            return allSavaebleStates;
         }
-
         public void RestoreState(object state)
         {
-            RestorePlayerPostion(state);
+            Dictionary<string,object> restoredSavaebleStates = (Dictionary<string, object>)state;
+            RestorePlayerStates(restoredSavaebleStates);
         }
 
-        private void RestorePlayerPostion(object state)
+        private void RestorePlayerStates(Dictionary<string,object> state)
         {
-            GetComponent<ActionSchedular>().CancelCurrentAction();
-            GetComponent<NavMeshAgent>().enabled = false;
-            SavaebleVector3 savedPosition = (SavaebleVector3)state;
-            transform.position = savedPosition.ToVector3();
-            GetComponent<NavMeshAgent>().enabled = true;
+            foreach(IESavaeble savaeble in gameObject.GetComponents<IESavaeble>())
+            {
+                savaeble.RestoreState(state[savaeble.ToString()]);
+            }
         }
 
 

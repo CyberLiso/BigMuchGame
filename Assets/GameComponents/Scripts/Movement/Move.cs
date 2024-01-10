@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using RPG.Core;
-using RPG.SceneManagment;
+using RPG.Saving;
 
 namespace RPG.Movement
 {
-    public class Move : MonoBehaviour, IAction
+    public class Move : MonoBehaviour, IAction, IESavaeble
     {
 
         //Variables:
@@ -54,7 +54,6 @@ namespace RPG.Movement
             player.destination = destination;
             player.isStopped = false;
         }
-<<<<<<< HEAD
 
         public object CaptureState()
         {
@@ -67,8 +66,6 @@ namespace RPG.Movement
             transform.position = restoredPlayerPosition.ToVector3();
             GetComponent<ActionSchedular>().CancelCurrentAction();
         }
-=======
->>>>>>> parent of 38ab555 (Changes)
     }
 }
 

@@ -10,45 +10,66 @@ namespace RPG.Saving
 {
     public class SavingSystem : MonoBehaviour
     {
+        /// <summary>
+        /// Serializes all states
+        /// </summary>
+        /// <param name="saveFile"></param>
         public void Save(string saveFile)
         {
-            string path = GetSaveFilePath(saveFile);
+            Dictionary<string,object> state = LoadFile(saveFile);
+            CaptureState(state);
+            SaveFile(saveFile, state);
+        }
+        /// <summary>
+        /// Loads the serialized states
+        /// </summary>
+        /// <param name="saveFile"></param>
+        public void Load(string saveFile)
+        {
+            RestoreState(LoadFile(saveFile));
+        }
+
+        private void SaveFile(string saveFile, object state)
+        {
+            string path = GetSaveFilePath(saveFile); 
             using (FileStream file = File.Open(path, FileMode.Create))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(file, CaptureState());
+                formatter.Serialize(file, state);
             }
-
-                Debug.Log("Saving to... " + path);
+            Debug.Log("Saving to... " + path);
         }
-        public void Load(string saveFile)
+
+        private Dictionary<string,object> LoadFile(string saveFile)
         {
             string path = GetSaveFilePath(saveFile);
+            object restoredState;
+            if (!File.Exists(path)) return new Dictionary<string, object>();
             using (FileStream file = File.Open(path, FileMode.Open))
             {
-                BinaryFormatter formatter = new BinaryFormatter();
-                RestoreState(formatter.Deserialize(file));
+                 BinaryFormatter formatter = new BinaryFormatter();
+                 restoredState = formatter.Deserialize(file);
             }
-
-            Debug.Log("Loading... " + path);
+            return (Dictionary<string,object>) restoredState;
         }
 
-        public object CaptureState()
+        public void CaptureState(Dictionary<string, object> state)
         {
-            Dictionary<string, object> state = new Dictionary<string, object>();
             foreach(SavaebleEntity entety in FindObjectsOfType<SavaebleEntity>())
             {
                 state[entety.GetUniqueIdentifier()] = entety.CaptureState();
             }
-            return state;
         }
         
-        public void RestoreState(object state)
+        public void RestoreState(Dictionary<string,object> state)
         {
-            Dictionary<string, object> stateRestored = (Dictionary<string, object>)state;
             foreach (SavaebleEntity entety in FindObjectsOfType<SavaebleEntity>())
             {
-                entety.RestoreState(stateRestored[entety.GetUniqueIdentifier()]);
+                if (!state.ContainsKey(entety.GetUniqueIdentifier()))
+                {
+                    return;
+                }
+                entety.RestoreState(state[entety.GetUniqueIdentifier()]);
             }
         }
         private string GetSaveFilePath(string saveFile)

@@ -13,12 +13,22 @@ namespace RPG.Saving
         {
             if (Input.GetKeyDown(KeyCode.S))
             {
-                GetComponent<SavingSystem>().Save(saveFile);
+                Save();
             }
             if (Input.GetKeyDown(KeyCode.L))
             {
-                GetComponent<SavingSystem>().Load(saveFile);
+                Load();
             }
+        }
+
+        public void Load()
+        {
+            GetComponent<SavingSystem>().Load(saveFile);
+        }
+
+        public void Save()
+        {
+            GetComponent<SavingSystem>().Save(saveFile);
         }
     }
 }
