@@ -39,19 +39,44 @@ namespace RPG.SceneManagment
 
         private IEnumerator PortalLoadWait()
         {
+            RemovePlayerControl();
             Fader fader = FindObjectOfType<Fader>();
             yield return fader.FadeOut(fadeOutTime);
             DontDestroyOnLoad(gameObject);
+<<<<<<< HEAD
+<<<<<<< HEAD
+            savingWrapper.Save();
+=======
             SavableWrapping saver = FindObjectOfType<SavableWrapping>();
             saver.ResaveSaveFile();
+            ReturnPlayerControl();
+>>>>>>> parent of 4b410f5 (Final Save System.)
+=======
+>>>>>>> parent of 38ab555 (Changes)
             yield return SceneManager.LoadSceneAsync(sceneIndex);
-            saver.LoadSaveFile();
             Portal NextPortal = GetPortal();
             UpdatePlayerPosition(NextPortal);
-            saver.ResaveSaveFile();
+<<<<<<< HEAD
+<<<<<<< HEAD
+            savingWrapper.Save();
+=======
+>>>>>>> parent of 4b410f5 (Final Save System.)
+=======
+>>>>>>> parent of 38ab555 (Changes)
             yield return new WaitForSeconds(timeToWaitInbetweenScenes);
             yield return fader.FadeIn(fadeOutTime);
             Destroy(gameObject);
+        }
+        private void RemovePlayerControl()
+        {
+            GameObject player = GameObject.FindWithTag("Player");
+            player.GetComponent<ActionSchedular>().CancelCurrentAction();
+            player.GetComponent<MovementController>().enabled = false;
+        }
+        private void ReturnPlayerControl()
+        {
+            GameObject player = GameObject.FindWithTag("Player");
+            player.GetComponent<MovementController>().enabled = true;
         }
 
         private void UpdatePlayerPosition(Portal nextPortal)
