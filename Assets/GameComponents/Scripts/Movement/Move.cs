@@ -5,11 +5,10 @@ using UnityEngine;
 using UnityEngine.AI;
 using RPG.Core;
 using RPG.Saving;
-using RPG.SceneManagment;
 
 namespace RPG.Movement
 {
-    public class Move : MonoBehaviour, IAction, ISaveable
+    public class Move : MonoBehaviour, IAction, IESavaeble
     {
 
         //Variables:
@@ -58,16 +57,14 @@ namespace RPG.Movement
 
         public object CaptureState()
         {
-            return new SerializableVector3(transform.position);
+            return new SavaebleVector3(transform.position);
         }
 
         public void RestoreState(object state)
-        { 
-            SerializableVector3 savedPlayerPosition = (SerializableVector3)state;
+        {
+            SavaebleVector3 restoredPlayerPosition = (SavaebleVector3)state;
+            transform.position = restoredPlayerPosition.ToVector3();
             GetComponent<ActionSchedular>().CancelCurrentAction();
-            player.enabled = false;
-            transform.position = savedPlayerPosition.ToVector();
-            player.enabled = true;
         }
     }
 }

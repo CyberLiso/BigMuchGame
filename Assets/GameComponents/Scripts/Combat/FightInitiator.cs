@@ -10,34 +10,25 @@ namespace RPG.Combat
     public class FightInitiator : MonoBehaviour, IAction
     {
         Health targetLocation;
-
-        [SerializeField] Transform RightHandPosition;
-        [SerializeField] Transform LeftHandPosition;
-        [SerializeField] Weapon DefaultWeapon = null;
-        Weapon currentWeapon = null;
-
+        [Range(0, 10)] [SerializeField] float StoppingDistance;
         [Range(0, 5)] [SerializeField] float attackThrotleTime;
+        [SerializeField] GameObject EquippedWeapon = null;
+        [SerializeField] Transform weaponPosition;
         private float timeSinceLastAttack = Mathf.Infinity;
         private bool canAttack = true;
-
-
+        public float fistAttackDamage = 10f;
         public void Attack(GameObject target)
         {
             GetComponent<ActionSchedular>().StartAction(this);
             targetLocation = target.GetComponent<Health>();
         }
 
+
+
         // Start is called before the first frame update
         void Start()
         {
-            EquipWeapon(DefaultWeapon);
-        }
-
-        public void EquipWeapon(Weapon EquippedWeapon)
-        {
-            currentWeapon = EquippedWeapon;
-            Animator animator = GetComponent<Animator>();
-            EquippedWeapon.SpawnWeapon(RightHandPosition, LeftHandPosition, animator);
+            //Instantiate(EquippedWeapon, weaponPosition);
         }
 
         public bool CanAttack(GameObject combatTarget)
@@ -92,7 +83,7 @@ namespace RPG.Combat
 
         private bool GetIsInRange()
         {
-            return Vector3.Distance(transform.position, targetLocation.transform.position) < currentWeapon.GetRange();
+            return Vector3.Distance(transform.position, targetLocation.transform.position) < StoppingDistance;
         }
 
         public void Cancel()
@@ -112,12 +103,7 @@ namespace RPG.Combat
         void Hit()
         {
             if (targetLocation == null) return;
-            targetLocation.TakeDamage(currentWeapon.GetDamage());
-        }
-
-        void Shoot()
-        {
-            currentWeapon.SpawnProjectile(targetLocation, LeftHandPosition);
+            targetLocation.TakeDamage(fistAttackDamage);
         }
 
     }
