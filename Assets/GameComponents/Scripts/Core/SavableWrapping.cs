@@ -35,6 +35,15 @@ namespace RPG.Core
             {
                 ResaveSaveFile();
             }
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                DeleteSaveFile();
+            }
+        }
+
+        private void DeleteSaveFile()
+        {
+            GetComponent<SavingSystem>().Delete(saveFileName);
         }
 
         public void ResaveSaveFile()

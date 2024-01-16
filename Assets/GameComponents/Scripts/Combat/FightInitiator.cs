@@ -10,23 +10,34 @@ namespace RPG.Combat
     public class FightInitiator : MonoBehaviour, IAction
     {
         Health targetLocation;
-        [Range(0, 10)] [SerializeField] float StoppingDistance;
+
+        [SerializeField] Transform RightHandPosition;
+        [SerializeField] Transform LeftHandPosition;
+        [SerializeField] Weapon DefaultWeapon = null;
+        Weapon currentWeapon = null;
+
         [Range(0, 5)] [SerializeField] float attackThrotleTime;
         private float timeSinceLastAttack = Mathf.Infinity;
         private bool canAttack = true;
-        public float fistAttackDamage = 10f;
+
+
         public void Attack(GameObject target)
         {
             GetComponent<ActionSchedular>().StartAction(this);
             targetLocation = target.GetComponent<Health>();
         }
 
-
-
         // Start is called before the first frame update
         void Start()
         {
+            EquipWeapon(DefaultWeapon);
+        }
 
+        public void EquipWeapon(Weapon EquippedWeapon)
+        {
+            currentWeapon = EquippedWeapon;
+            Animator animator = GetComponent<Animator>();
+            EquippedWeapon.SpawnWeapon(RightHandPosition, LeftHandPosition, animator);
         }
 
         public bool CanAttack(GameObject combatTarget)
@@ -81,7 +92,7 @@ namespace RPG.Combat
 
         private bool GetIsInRange()
         {
-            return Vector3.Distance(transform.position, targetLocation.transform.position) < StoppingDistance;
+            return Vector3.Distance(transform.position, targetLocation.transform.position) < currentWeapon.GetRange();
         }
 
         public void Cancel()
@@ -101,7 +112,12 @@ namespace RPG.Combat
         void Hit()
         {
             if (targetLocation == null) return;
-            targetLocation.TakeDamage(fistAttackDamage);
+            targetLocation.TakeDamage(currentWeapon.GetDamage());
+        }
+
+        void Shoot()
+        {
+            currentWeapon.SpawnProjectile(targetLocation, LeftHandPosition);
         }
 
     }
