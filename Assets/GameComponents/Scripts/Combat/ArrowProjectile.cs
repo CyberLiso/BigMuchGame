@@ -30,6 +30,7 @@ namespace RPG.Combat
             transform.Translate(arrowSpeed * Time.deltaTime * Vector3.forward);
         }
 
+
         private void OnTriggerEnter(Collider other)
         {
             if(other.gameObject == target.gameObject)
